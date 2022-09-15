@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Bootcamp;
 
 class bootcampController extends Controller
 {
@@ -13,7 +14,9 @@ class bootcampController extends Controller
      */
     public function index()
     {
-        echo'aqui se van a mostrar todos los bootcamps';
+        return response()->json(["success"=>true,
+                                "data"=>Bootcamp::all()],
+                                200);
     }
 
     /**
@@ -24,7 +27,13 @@ class bootcampController extends Controller
      */
     public function store(Request $request)
     {
-        echo'Aqui se va a guardar un nuevo Bootcamp';
+       //Verificar datos del payload
+       //guardar el Bootcamp
+        return response()->json([
+                "success"=>true,
+                "data"=>Bootcamp::create($request->all())
+                ],201);
+
     }
 
     /**
@@ -35,7 +44,10 @@ class bootcampController extends Controller
      */
     public function show($id)
     {
-        echo"Aqui se va a mostrar el bootcamp cuyo id es $id";
+        return response()->json([
+            "success"=>true,
+            "data"=>Bootcamp::find($id)
+        ],200);
     }
 
     /**
@@ -47,7 +59,18 @@ class bootcampController extends Controller
      */
     public function update(Request $request, $id)
     {
-        echo"Aqui se va a actualizar el bootcamp cuyo id es $id";
+            //1. Seleccionar el BootCamp a Actualizar
+            //2. Actualizar el BootCapm
+            //3. Enviar el Bootcamp Actualizado
+            $b = Bootcamp::find($id);
+
+            $b->update($request->all());
+
+            return response()->json([
+                    "success"=>true,
+                    "data"=>$b
+                ],200);
+            return $b;
     }
 
     /**
@@ -58,6 +81,14 @@ class bootcampController extends Controller
      */
     public function destroy($id)
     {
-        echo"Aqui se va a eliminar el bootcamp cuyo id es $id";
+         $b = Bootcamp::find($id);
+
+            $b->delete();
+            
+            return response()->json([
+                    "success"=>true,
+                    "data"=>$b
+                ],200);
+            return $b;
     }
 }
